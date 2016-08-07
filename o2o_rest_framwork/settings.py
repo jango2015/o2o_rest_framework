@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'o2o_rest_framwork.user_model',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -76,8 +78,12 @@ WSGI_APPLICATION = 'o2o_rest_framwork.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'o2o_rest_framework',
+		'USER': 'root',
+		'PASSWORD':'',
+		'HOST':'',
+		'PORT':'',
     }
 }
 
@@ -119,3 +125,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#email
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = 'pwy619728251' #my gmail password
+EMAIL_HOST_USER = 'weiyupeng23@gmail.com' #my gmail username
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
