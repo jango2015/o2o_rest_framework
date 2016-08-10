@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'o2o_rest_framwork.user_model',
+    'o2o_rest_framwork.customer_model',
+    'o2o_rest_framwork.enterprise_model',
+    'o2o_rest_framwork.department_model',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -125,6 +128,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS=(os.path.join(BASE_DIR,'o2o_rest_framwork/static'),)
 
 #email
 EMAIL_USE_TLS = True
@@ -134,3 +138,7 @@ EMAIL_HOST_PASSWORD = 'pwy619728251' #my gmail password
 EMAIL_HOST_USER = 'weiyupeng23@gmail.com' #my gmail username
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+#media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'o2o_rest_framwork/media')
+MEDIA_URL = '/media/'

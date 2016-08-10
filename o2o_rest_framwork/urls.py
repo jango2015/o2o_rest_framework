@@ -20,4 +20,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^user/', include('o2o_rest_framwork.user_model.urls', namespace='users-api')),
+    url(r'^engineer/', include('o2o_rest_framwork.customer_model.urls', namespace='engineer-api')),
+    url(r'^company/', include('o2o_rest_framwork.enterprise_model.urls', namespace='enterprise-api')),
+    url(r'^department/', include('o2o_rest_framwork.department_model.urls', namespace='department-api')),
 ]

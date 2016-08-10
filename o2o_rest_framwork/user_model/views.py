@@ -23,7 +23,7 @@ from .serializers import( UserLogInSerialiser,
 
 from o2o_rest_framwork import settings
 
-
+from o2o_rest_framwork.permissions.UserPermissions import IsOwner,IsVarified
 
 class UserCreateAPIView(CreateAPIView):
 
@@ -74,11 +74,12 @@ class UserLogInAPIView(GenericAPIView):
 
 class UserDetailAPIView(RetrieveAPIView):
 
-    # permission_classes = [AllowAny] #should be AllowMyself
+    permission_classes = [IsOwner]
     serializer_class = UserDetailSerializer
     queryset = User.objects.all()
 
 class UserVerifyAPIView(GenericAPIView):
+
     def get(self,request,*args,**kwargs):
         id = kwargs['id']
         email = kwargs['email']

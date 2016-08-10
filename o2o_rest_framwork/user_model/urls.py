@@ -15,7 +15,13 @@ urlpatterns = [
     url(r'^(?P<pk>[\d]+)/$', UserDetailAPIView.as_view(), name='detail'),
     # url(r'^confirm',UserLogInAPIView, name='confirm'),
     url(r'^logout/$', UserLogoutAPIView.as_view(), name='logout'),
-    url(r'^confirm/email/(?P<email>[\S]+)/id/(?P<id>[\d]+)$', UserVerifyAPIView.as_view(), name='confirm'),
+    url(r'^confirm/(?P<email>[\S]+)/(?P<id>[\d]+)$', UserVerifyAPIView.as_view(), name='confirm'),
 
 
 ]
+'''
+login:  http://127.0.0.1:8000/user/login/
+register:   http://127.0.0.1:8000/user/register/
+email_comfirm:  http://127.0.0.1:8000/user/confirm/<email>/<id>
+detail: http://127.0.0.1:8000/user/<id>/
+'''
