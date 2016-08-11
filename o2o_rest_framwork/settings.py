@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters', #just add for filter test
+    'crispy_forms',
     'rest_framework',
     'o2o_rest_framwork.user_model',
     'o2o_rest_framwork.customer_model',
@@ -142,3 +144,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 #media
 MEDIA_ROOT = os.path.join(BASE_DIR, 'o2o_rest_framwork/media')
 MEDIA_URL = '/media/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
+}

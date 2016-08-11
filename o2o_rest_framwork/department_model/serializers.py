@@ -7,12 +7,11 @@ from o2o_rest_framwork.department_model.models import Department
 from o2o_rest_framwork.enterprise_model.serializers import CompanyDetailSerializer,Company
 
 
-
 class DepartmentDetailSerializer(serializers.ModelSerializer):
 
     user =serializers.SerializerMethodField()
 
-    # company = serializers.SerializerMethodField()
+    company = serializers.SerializerMethodField()
 
     class Meta:
         model = Department
@@ -26,7 +25,9 @@ class DepartmentDetailSerializer(serializers.ModelSerializer):
     def get_user(self,obj):
         user=obj.user
         return UserDetailSerializer(user,many=False).data
-
+    def get_company(self,obj):
+        company = Company.objects.get(user=obj.company)
+        return CompanyDetailSerializer(company).data
 
 
 
@@ -80,7 +81,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
 
 class PostListSerializer(serializers.ModelSerializer):
-
+    detail = serializers.HyperlinkedIdentityField(view_name= 'department-api:post_detail')
     class Meta:
         model = RecruitmentInformation
 
@@ -96,7 +97,9 @@ class PostListSerializer(serializers.ModelSerializer):
                   'salary',
                   'state',
                   'city',
+                  'detail',
                   ]
+
 
 # class CompanyUpdateSerializer(serializers.ModelSerializer):
 #

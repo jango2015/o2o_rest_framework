@@ -19,12 +19,14 @@ from .serializers import(
     EngineerCreateSerializer,
     EngineerDetailSerializer
                           )
-
+import django_filters
+from rest_framework import filters
 from .models import Engineer
 from o2o_rest_framwork.permissions.UserPermissions import NotAssociated,IsVarified
 from o2o_rest_framwork.permissions.CustomerPermissions import IsCustomer,IsOwner
 from o2o_rest_framwork.department_model.models import RecruitmentInformation
 from o2o_rest_framwork.department_model.serializers import PostListSerializer
+
 
 
 class EngineerCreateAPIView(CreateAPIView):
@@ -50,11 +52,25 @@ class EngineerUpdateAPIView(UpdateAPIView):
     queryset = Engineer.objects.all()
     permission_classes = [IsVarified,IsOwner,IsCustomer]
 
+
+STATE=(('BJ','BJ'),('TJ','TJ'))
+class RecruitmentFielter(filters.FilterSet):
+    date_u_can_begin = django_filters.DateFilter(name='begin_date',lookup_expr='gte')
+    date_u_have_to_end = django_filters.DateFilter(name='end_date',lookup_expr='lte')
+    salary = django_filters.NumberFilter(name='salary',lookup_expr='gte')
+    title = django_filters.CharFilter(name='title',lookup_expr='contains')
+    state = django_filters.ChoiceFilter(name='state',choices=STATE)
+    class Meta:
+        model = RecruitmentInformation
+        fields = ['title','date_u_can_begin','date_u_have_to_end','state','salary']
+
 class RecruitmentListAPIView(ListAPIView):
 
     serializer_class = PostListSerializer
     permission_classes = [IsVarified]
-    filter_backends = [SearchFilter,OrderingFilter]
+    # filter_backends = (OrderingFilter)
+    # filter_fields = ['title','begin_date','end_date','state','salary']
+    filter_class =RecruitmentFielter
     queryset = RecruitmentInformation.objects.all()
     pagination_class = ListPagination
 
