@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Company
 from o2o_rest_framwork.user_model.serializers import UserDetailSerializer
-from o2o_rest_framwork.department_model.models import Department
+from o2o_rest_framwork.department_model.models import Department,RecruitmentInformation
 
 class CompanyCreateSerializer(serializers.ModelSerializer):
 
@@ -121,6 +121,11 @@ class DepartmentCreateSerializer(serializers.ModelSerializer):
         #                         bussiness_area= bussiness_area
         #                         )
         # department.save()
+class DenyReasonSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RecruitmentInformation
+        fields = ['reason_of_deny']
 
 
 

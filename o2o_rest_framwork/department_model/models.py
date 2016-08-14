@@ -22,6 +22,8 @@ class Post(models.Model):
     date=models.DateField()
     description=models.CharField(max_length=200)
     is_varified=models.BooleanField(default=False)
+    is_denied=models.BooleanField(default=False)
+    is_over=models.BooleanField(default=False)
     reason_of_deny=models.TextField(max_length=300,blank=True,null=True)
 
     class Meta:

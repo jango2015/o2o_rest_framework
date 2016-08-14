@@ -16,10 +16,13 @@ from rest_framework.decorators import api_view
 from rest_framework.permissions import (
     IsAuthenticated
 )
+from rest_framework.reverse import reverse_lazy
+
 from .serializers import (
     DepartmentDetailSerializer,
     PostCreateSerialiser,
     PostDetailSerializer,
+    PostListSerializer,
                           )
 from rest_framework.mixins import UpdateModelMixin,DestroyModelMixin
 
@@ -29,7 +32,9 @@ from o2o_rest_framwork.permissions.UserPermissions import NotAssociated,IsVarifi
 from o2o_rest_framwork.permissions.EnterprisePermissions import IsEnterprise,IsOwner
 from o2o_rest_framwork.permissions.DepartmentPermissions import DepartmentChangingOrDeletingPermission,IsDepartment
 from o2o_rest_framwork.department_model.models import Department,RecruitmentInformation
-
+from o2o_rest_framwork.department_model.serializers import PostDetailSerializer
+from o2o_rest_framwork.order_model.models import Application
+from o2o_rest_framwork.order_model.serializers import ApplicationListSerializer
 
 
 # class CompanyCreateAPIView(CreateAPIView):
@@ -79,11 +84,68 @@ class RecruitmentDetailAPIView(RetrieveAPIView):
     queryset = RecruitmentInformation.objects.all()
 
 
-# class CompanyUpdateAPIView(UpdateAPIView):
-#
-#     serializer_class = CompanyUpdateSerializer
-#     queryset = Company.objects.all()
-#     permission_classes = [IsVarified,IsOwner,IsEnterprise]
+class DepartmentHomepageAPIView(GenericAPIView):
+    permission_classes = [IsVarified,IsDepartment,IsOwner]
+
+    def get(self,request):
+        recruitment_info=RecruitmentInformation.objects.filter(department=request.user)
+        data={}
+        approved_recruitment_info = recruitment_info.filter(is_varified=True)
+        pending_recruitment_info = recruitment_info.filter(is_varified=False)
+        denied_recruitment_info = recruitment_info.filter(is_denied=True)
+        applications = Application.objects.filter_by_department(user=request.user)
+        applying = applications.filter(status='w')
+        pending = applications.filter(status='s')
+        data['approved_recruitment_info']=[list for each in approved_recruitment_info]
+        data['approved_recruitment_info']=PostListSerializer(approved_recruitment_info, many=True,context={'request': request}).data
+        data['pending_recruitment_info']=PostListSerializer(pending_recruitment_info, many=True,context={'request': request}).data
+        data['denied_recruitment_info']=PostListSerializer(denied_recruitment_info, many=True,context={'request': request}).data
+        data['applying'] = ApplicationListSerializer(applying,many=True,context={'request': request}).data
+        data['pending'] = ApplicationListSerializer(pending,many=True,context={'request': request}).data
+        #cause in our serializers, we called anther funcyions so we must have context={'request': request}
+
+
+        data['revers test']=reverse_lazy('users-api:login',request=request)
+
+        return Response(data)
+
+
+
+class ApplicationManagerAPIView(GenericAPIView):
+
+    def get(self,request,*args,**kwargs):
+        method = self.kwargs['method']
+        id = self.kwargs['id']
+
+        application = Application.objects.get(id=id)
+
+        if method == 'approve':
+            if application.status != 'w':
+                return Response(HTTP_400_BAD_REQUEST)
+            recruitment_info = application.recruitment
+            recruitment_info.is_over = True
+            recruitment_info.save()
+            application.status = 'a'
+            application.save()
+
+        if method == 'finish':
+
+            if application.status != 's':
+                return Response(HTTP_400_BAD_REQUEST)
+
+            application.status = 'f'
+            application.save()
+
+        if method == 'deny':
+            if application.status != 'w':
+                return Response(HTTP_400_BAD_REQUEST)
+            application.status = 'd'
+            application.save()
+
+        return Response(HTTP_200_OK)
+
+
+
 
 
 #

@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^engineer/', include('o2o_rest_framwork.customer_model.urls', namespace='engineer-api')),
     url(r'^company/', include('o2o_rest_framwork.enterprise_model.urls', namespace='enterprise-api')),
     url(r'^department/', include('o2o_rest_framwork.department_model.urls', namespace='department-api')),
+    url(r'^application/',include('o2o_rest_framwork.order_model.urls',namespace='application-api')),
 ]

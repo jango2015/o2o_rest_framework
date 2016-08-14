@@ -26,7 +26,8 @@ from o2o_rest_framwork.permissions.UserPermissions import NotAssociated,IsVarifi
 from o2o_rest_framwork.permissions.CustomerPermissions import IsCustomer,IsOwner
 from o2o_rest_framwork.department_model.models import RecruitmentInformation
 from o2o_rest_framwork.department_model.serializers import PostListSerializer
-
+from o2o_rest_framwork.order_model.models import Application
+from o2o_rest_framwork.order_model.serializers import ApplicationListSerializer
 
 
 class EngineerCreateAPIView(CreateAPIView):
@@ -73,5 +74,54 @@ class RecruitmentListAPIView(ListAPIView):
     filter_class =RecruitmentFielter
     queryset = RecruitmentInformation.objects.all()
     pagination_class = ListPagination
+
+class EngineerHomepageAPIView(GenericAPIView):
+
+    def get(self,request):
+        application = Application.objects.filter(applier=request.user)
+        data={}
+        data['applying'] = ApplicationListSerializer(application.filter(status='w'),
+                                                     many=True,
+                                                     context={'request': request}
+                                                     ).data
+        data['start'] = ApplicationListSerializer(application.filter(status='s'),
+                                                  many=True,
+                                                  context={'request': request}
+                                                  ).data
+        data['approving'] = ApplicationListSerializer(application.filter(status='a'),
+                                                  many=True,
+                                                  context={'request': request}
+                                                  ).data
+
+        return Response(data,HTTP_200_OK)
+
+
+
+class ApplicationManagerAPIView(GenericAPIView):
+
+    def get(self,request,*args,**kwargs):
+        method = self.kwargs['method']
+        id = self.kwargs['id']
+
+        application = Application.objects.get(id=id)
+
+        if method == 'deny':
+            if application.status != 'a':
+                return Response(HTTP_400_BAD_REQUEST)
+            recruitment_info = application.recruitment
+            recruitment_info.is_over = False
+            recruitment_info.save()
+            application.status = 'd'
+            application.save()
+
+        if method == 'start':
+
+            if application.status != 'a':
+                return Response(HTTP_400_BAD_REQUEST)
+
+            application.status = 's'
+            application.save()
+
+        return Response(HTTP_200_OK)
 
 

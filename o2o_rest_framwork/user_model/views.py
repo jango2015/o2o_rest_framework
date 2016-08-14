@@ -63,8 +63,6 @@ class UserLogInAPIView(GenericAPIView):
             new_data = serialiser.data
             # user = User.user = User.objects.filter(username=new_data['username'])
             user = authenticate(username=new_data.get('username'), password=new_data.get('password'))
-            print new_data.get('username'),
-            print new_data.get('password'),
             if user is not None:
                 login(request,user)
             else:

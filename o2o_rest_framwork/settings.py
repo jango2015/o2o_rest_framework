@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'o2o_rest_framwork.customer_model',
     'o2o_rest_framwork.enterprise_model',
     'o2o_rest_framwork.department_model',
+    'o2o_rest_framwork.order_model',
 ]
 
 MIDDLEWARE_CLASSES = [
