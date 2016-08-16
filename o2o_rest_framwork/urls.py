@@ -24,4 +24,6 @@ urlpatterns = [
     url(r'^company/', include('o2o_rest_framwork.enterprise_model.urls', namespace='enterprise-api')),
     url(r'^department/', include('o2o_rest_framwork.department_model.urls', namespace='department-api')),
     url(r'^application/',include('o2o_rest_framwork.order_model.urls',namespace='application-api')),
+    url(r'^message/',include('o2o_rest_framwork.message.urls',namespace='message-api')),
+
 ]

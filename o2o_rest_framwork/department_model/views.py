@@ -97,11 +97,32 @@ class DepartmentHomepageAPIView(GenericAPIView):
         applying = applications.filter(status='w')
         pending = applications.filter(status='s')
         data['approved_recruitment_info']=[list for each in approved_recruitment_info]
-        data['approved_recruitment_info']=PostListSerializer(approved_recruitment_info, many=True,context={'request': request}).data
-        data['pending_recruitment_info']=PostListSerializer(pending_recruitment_info, many=True,context={'request': request}).data
-        data['denied_recruitment_info']=PostListSerializer(denied_recruitment_info, many=True,context={'request': request}).data
-        data['applying'] = ApplicationListSerializer(applying,many=True,context={'request': request}).data
-        data['pending'] = ApplicationListSerializer(pending,many=True,context={'request': request}).data
+        data['approved_recruitment_info']=PostListSerializer(
+                approved_recruitment_info,
+                many=True,
+                context={'request': request}
+        ).data
+
+        data['pending_recruitment_info']=PostListSerializer(
+                pending_recruitment_info,
+                many=True,
+                context={'request': request}
+        ).data
+        data['denied_recruitment_info']=PostListSerializer(
+                denied_recruitment_info,
+                many=True,
+                context={'request': request}
+        ).data
+        data['applying'] = ApplicationListSerializer(
+                applying,
+                many=True,
+                context={'request': request}
+        ).data
+        data['pending'] = ApplicationListSerializer(
+                pending,
+                many=True,
+                context={'request': request}
+        ).data
         #cause in our serializers, we called anther funcyions so we must have context={'request': request}
 
 
