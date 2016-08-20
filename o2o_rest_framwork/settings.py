@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'o2o_rest_framwork.department_model',
     'o2o_rest_framwork.order_model',
     'o2o_rest_framwork.message',
+    'o2o_rest_framwork.comment',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -57,6 +58,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'o2o_rest_framwork.urls'

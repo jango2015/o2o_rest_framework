@@ -20,7 +20,7 @@ class Messagemanager(models.Manager):
         num = Message.objects.filter(to_user=user,is_read=False).count()
 
         return num
-    
+
 class Message(MessageModel):
 
     objects = Messagemanager()
