@@ -28,7 +28,7 @@ from o2o_rest_framwork.user_model.serializers import UserDetailSerializer
 
 
 from .models import Message
-from o2o_rest_framwork.permissions.UserPermissions import NotAssociated,IsVarified
+from o2o_rest_framwork.permissions.MessagePermissions import IsAllowToSendMessage
 from o2o_rest_framwork.permissions.EnterprisePermissions import IsEnterprise,IsOwner
 from o2o_rest_framwork.permissions.DepartmentPermissions import DepartmentChangingOrDeletingPermission,IsDepartment
 from o2o_rest_framwork.department_model.models import Department,RecruitmentInformation
@@ -40,7 +40,7 @@ from o2o_rest_framwork.order_model.serializers import ApplicationListSerializer
 class MessageCreateAPIView(CreateAPIView):
 
     serializer_class = MessageCreateSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated,IsAllowToSendMessage]
 
     def perform_create(self, serializer):
         from_user = self.request.user
@@ -50,7 +50,7 @@ class MessageCreateAPIView(CreateAPIView):
 
 class MessageHomepageAPIView(GenericAPIView):
 
-    permission_classes = []
+    permission_classes = [IsAuthenticated,IsAllowToSendMessage]
 
     def get(self,request,*args,**kwargs):
         messages =  Message.objects.filter(Q(to_user=request.user)|Q(from_user=request.user))
@@ -71,7 +71,7 @@ class MessageHomepageAPIView(GenericAPIView):
 class MessageRecordAPIView(ListAPIView):
 
     serializer_class = MessageListDetailSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated,IsAllowToSendMessage]
 
     def get_queryset(self):
 

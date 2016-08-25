@@ -28,7 +28,7 @@ from o2o_rest_framwork.user_model.serializers import UserDetailSerializer
 
 
 from .models import Comment
-from o2o_rest_framwork.permissions.UserPermissions import NotAssociated,IsVarified
+from o2o_rest_framwork.permissions.CommentPermissions import IsAllowtoCreateComment,IsAllowToSearch
 from o2o_rest_framwork.permissions.EnterprisePermissions import IsEnterprise,IsOwner
 from o2o_rest_framwork.permissions.DepartmentPermissions import DepartmentChangingOrDeletingPermission,IsDepartment
 from o2o_rest_framwork.department_model.models import Department,RecruitmentInformation
@@ -40,7 +40,7 @@ from o2o_rest_framwork.order_model.serializers import ApplicationListSerializer
 class CommentCreateAPIView(CreateAPIView):
 
     serializer_class = CommentCreateSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated,IsAllowtoCreateComment]
 
     def perform_create(self, serializer):
         application = Application.objects.get(id = self.kwargs['app_id'])
@@ -53,14 +53,14 @@ class CommentCreateAPIView(CreateAPIView):
 class CommentDetailAPIView(RetrieveAPIView):
 
     serializer_class = CommentDetailSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
     queryset = Comment.objects.all()
 
 
 class MyCommentListAPIView(ListAPIView):
 
     serializer_class = CommentListSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -71,7 +71,7 @@ class MyCommentListAPIView(ListAPIView):
 class SearchCommentListAPIView(ListAPIView):
 
     serializer_class = CommentListSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated,IsAllowToSearch]
 
     def get_queryset(self):
         id = self.kwargs['id']
